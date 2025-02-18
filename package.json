@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "productName": "Orizon Launcher",
   "description": "Modded Minecraft Launcher",
-  "author": "Nefers12",
+  "author": "orizoncornichon",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/Nefers12/HeliosLauncher/",
+  "homepage": "https://github.com/orizoncornichon/helios-private",
   "bugs": {
-    "url": "https://github.com/Nefers12/HeliosLauncher/issues"
+    "url": "https://github.com/orizoncornichon/helios-private/issues"
   },
   "private": true,
   "main": "index.js",
@@ -47,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nefers12/HeliosLauncher.git"
+    "url": "git+https://github.com/orizoncornichon/helios-private.git"
   }
 }

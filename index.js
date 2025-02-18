@@ -17,6 +17,8 @@ const LangLoader                        = require('./app/assets/js/langloader')
 LangLoader.setupLanguage()
 
 // Setup auto updater.
+
+// Setup auto updater.
 function initAutoUpdater(event, data) {
     if (data) {
         autoUpdater.allowPrerelease = true;
@@ -32,6 +34,9 @@ function initAutoUpdater(event, data) {
     if (process.platform === 'darwin') {
         autoUpdater.autoDownload = false;
     }
+
+    console.log('Update config path:', autoUpdater.updateConfigPath);
+
     autoUpdater.on('update-available', (info) => {
         event.sender.send('autoUpdateNotification', 'update-available', info);
     });

@@ -17,82 +17,78 @@ const LangLoader                        = require('./app/assets/js/langloader')
 LangLoader.setupLanguage()
 
 // Setup auto updater.
-
-// Setup auto updater.
 function initAutoUpdater(event, data) {
-    if (data) {
-        autoUpdater.allowPrerelease = true;
+
+    if(data){
+        autoUpdater.allowPrerelease = true
     } else {
         // Defaults to true if application version contains prerelease components (e.g. 0.12.1-alpha.1)
-        // autoUpdater.allowPrerelease = true;
+        // autoUpdater.allowPrerelease = true
     }
-
-    if (isDev) {
-        autoUpdater.autoInstallOnAppQuit = false;
-        autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
+    
+    if(isDev){
+        autoUpdater.autoInstallOnAppQuit = false
+        autoUpdater.updateConfigPath = path.join(__dirname, 'new-repo-update.yml')
     }
-    if (process.platform === 'darwin') {
-        autoUpdater.autoDownload = false;
+    if(process.platform === 'darwin'){
+        autoUpdater.autoDownload = false
     }
-
-    console.log('Update config path:', autoUpdater.updateConfigPath);
-
     autoUpdater.on('update-available', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-available', info);
-    });
+        event.sender.send('autoUpdateNotification', 'update-available', info)
+    })
     autoUpdater.on('update-downloaded', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-downloaded', info);
-    });
+        event.sender.send('autoUpdateNotification', 'update-downloaded', info)
+    })
     autoUpdater.on('update-not-available', (info) => {
-        event.sender.send('autoUpdateNotification', 'update-not-available', info);
-    });
+        event.sender.send('autoUpdateNotification', 'update-not-available', info)
+    })
     autoUpdater.on('checking-for-update', () => {
-        event.sender.send('autoUpdateNotification', 'checking-for-update');
-    });
+        event.sender.send('autoUpdateNotification', 'checking-for-update')
+    })
     autoUpdater.on('error', (err) => {
-        event.sender.send('autoUpdateNotification', 'realerror', err);
-    });
+        event.sender.send('autoUpdateNotification', 'realerror', err)
+    }) 
 }
 
 // Open channel to listen for update actions.
 ipcMain.on('autoUpdateAction', (event, arg, data) => {
-    switch (arg) {
+    switch(arg){
         case 'initAutoUpdater':
-            console.log('Initializing auto updater.');
-            initAutoUpdater(event, data);
-            event.sender.send('autoUpdateNotification', 'ready');
-            break;
+            console.log('Initializing auto updater.')
+            initAutoUpdater(event, data)
+            event.sender.send('autoUpdateNotification', 'ready')
+            break
         case 'checkForUpdate':
-            console.log('Checking for updates...');
+
             autoUpdater.checkForUpdates()
-                .then(() => {
-                    console.log('Update check completed');
-                })
                 .catch(err => {
-                    console.error('Update check failed:', err);
-                    event.sender.send('autoUpdateNotification', 'realerror', err);
-                });
-            break;
+                    event.sender.send('autoUpdateNotification', 'realerror', err)
+                })
+            break
+
+
+
+
         case 'allowPrereleaseChange':
-            if (!data) {
-                const preRelComp = semver.prerelease(app.getVersion());
-                if (preRelComp != null && preRelComp.length > 0) {
-                    autoUpdater.allowPrerelease = true;
+            if(!data){
+                const preRelComp = semver.prerelease(app.getVersion())
+                if(preRelComp != null && preRelComp.length > 0){
+                    autoUpdater.allowPrerelease = true
                 } else {
-                    autoUpdater.allowPrerelease = data;
+                    autoUpdater.allowPrerelease = data
                 }
             } else {
-                autoUpdater.allowPrerelease = data;
+                autoUpdater.allowPrerelease = data
             }
-            break;
+            break
         case 'installUpdateNow':
-            autoUpdater.quitAndInstall();
-            break;
+            autoUpdater.quitAndInstall()
+            break
         default:
-            console.log('Unknown argument', arg);
-            break;
+            console.log('Unknown argument', arg)
+            break
     }
-});
+})
 // Redirect distribution index event from preloader to renderer.
 ipcMain.on('distributionIndexDone', (event, res) => {
     event.sender.send('distributionIndexDone', res)
@@ -207,7 +203,7 @@ ipcMain.on(MSFT_OPCODE.OPEN_LOGOUT, (ipcEvent, uuid, isLastAccount) => {
             ipcEvent.reply(MSFT_OPCODE.REPLY_LOGOUT, MSFT_REPLY_TYPE.SUCCESS, uuid, isLastAccount)
         }
     })
-    
+
     msftLogoutWindow.webContents.on('did-navigate', (_, uri) => {
         if(uri.startsWith('https://login.microsoftonline.com/common/oauth2/v2.0/logoutsession')) {
             msftLogoutSuccess = true
@@ -224,7 +220,7 @@ ipcMain.on(MSFT_OPCODE.OPEN_LOGOUT, (ipcEvent, uuid, isLastAccount) => {
             }, 5000)
         }
     })
-    
+
     msftLogoutWindow.removeMenu()
     msftLogoutWindow.loadURL('https://login.microsoftonline.com/common/oauth2/v2.0/logout')
 })
@@ -271,7 +267,7 @@ function createWindow() {
 }
 
 function createMenu() {
-    
+
     if(process.platform === 'darwin') {
 
         // Extend default included application menu to continue support for quit keyboard shortcut
@@ -373,4 +369,4 @@ app.on('activate', () => {
     if (win === null) {
         createWindow()
     }
-})
+    })

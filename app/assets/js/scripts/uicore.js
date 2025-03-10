@@ -212,10 +212,3 @@ document.addEventListener('keydown', function (e) {
         window.toggleDevTools()
     }
 })
-
-document.addEventListener('keydown', function (e) {
-    if((e.key === 'L' || e.key === 'l') && e.ctrlKey && e.shiftKey){
-        let window = remote.getCurrentWindow()
-        window.toggleDevTools()
-    }
-})

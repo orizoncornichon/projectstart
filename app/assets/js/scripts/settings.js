@@ -1315,15 +1315,39 @@ function populateMemoryStatus(){
  * 
  * @param {string} execPath The executable path to populate against.
  */
-async function populateJavaExecDetails(execPath){
-    const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+async function populateJavaExecDetails(execPath) {
+    const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer());
 
-    const details = await validateSelectedJvm(ensureJavaDirIsRoot(execPath), server.effectiveJavaOptions.supported)
+    const details = await validateSelectedJvm(ensureJavaDirIsRoot(execPath), server.effectiveJavaOptions.supported);
 
-    if(details != null) {
-        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.selectedJava', { version: details.semverStr, vendor: details.vendor })
+    if (details != null) {
+        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.selectedJava', { version: details.semverStr, vendor: details.vendor });
+
+        // Check if the Java version is at least 23
+        if (details.semver.major < 23) {
+            setOverlayContent(
+                Lang.queryJS('settings.java.versionTooLowTitle'),
+                Lang.queryJS('settings.java.versionTooLowMessage', { required: 23, detected: details.semver.major }),
+                Lang.queryJS('settings.java.downloadButton')
+            );
+            setOverlayHandler(() => {
+                shell.openExternal('https://adoptium.net/'); // Link to download Java
+                toggleOverlay(false);
+            });
+            toggleOverlay(true);
+        }
     } else {
-        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.invalidSelection')
+        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.invalidSelection');
+        setOverlayContent(
+            Lang.queryJS('settings.java.notFoundTitle'),
+            Lang.queryJS('settings.java.notFoundMessage'),
+            Lang.queryJS('settings.java.downloadButton')
+        );
+        setOverlayHandler(() => {
+            shell.openExternal('https://adoptium.net/'); // Link to download Java
+            toggleOverlay(false);
+        });
+        toggleOverlay(true);
     }
 }
 

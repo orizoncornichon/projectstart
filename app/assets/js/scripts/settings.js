@@ -1331,7 +1331,7 @@ async function populateJavaExecDetails(execPath) {
                 Lang.queryJS('settings.java.downloadButton')
             );
             setOverlayHandler(() => {
-                shell.openExternal('https://adoptium.net/'); // Link to download Java
+                shell.openExternal('https://adoptium.net/fr/temurin/releases/?os=windows&arch=x64&package=jre&version=23'); // Link to download Java
                 toggleOverlay(false);
             });
             toggleOverlay(true);

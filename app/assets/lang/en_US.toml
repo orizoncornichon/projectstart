@@ -173,7 +173,7 @@ players = "JOUEURS"
 [js.landing.systemScan]
 checking = "Vérification des informations système.."
 noCompatibleJava = "Aucune installation de Java compatible trouvée."
-installJavaMessage = "Voulez vous installer Java ?"
+installJavaMessage = "Veuillez installer Java 21"
 installJava = "Installer Java"
 installJavaManually = "Installer manuellement"
 javaDownloadPrepare = "Préparation du téléchargement de Java.."
@@ -263,6 +263,11 @@ selectedJava = "Selected: Java {version} ({vendor})"
 invalidSelection = "Section invalide"
 requiresJava = "Requires Java {major} x64."
 availableOptions = "Available Options for Java {major} (HotSpot VM)"
+versionTooLowTitle = "Veuillez installer java 21"
+downloadButton = 'Télécharger'
+
+notFoundTitle = "Aucune version Java trouvée"
+notFoundMessage = "Veuillez installer java 21"
 
 [js.settings.about]
 preReleaseTitle = "Pre-release"

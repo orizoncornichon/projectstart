@@ -1323,15 +1323,15 @@ async function populateJavaExecDetails(execPath) {
     if (details != null) {
         settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.selectedJava', { version: details.semverStr, vendor: details.vendor });
 
-        // Check if the Java version is at least 23
-        if (details.semver.major < 23) {
+        // Check if the Java version is at least 21
+        if (details.semver.major < 21) {
             setOverlayContent(
                 Lang.queryJS('settings.java.versionTooLowTitle'),
-                Lang.queryJS('settings.java.versionTooLowMessage', { required: 23, detected: details.semver.major }),
+                Lang.queryJS('settings.java.versionTooLowMessage', { required: 21, detected: details.semver.major }),
                 Lang.queryJS('settings.java.downloadButton')
             );
             setOverlayHandler(() => {
-                shell.openExternal('https://adoptium.net/fr/temurin/releases/?os=windows&arch=x64&package=jre&version=23'); // Link to download Java
+                shell.openExternal('https://adoptium.net/fr/temurin/releases/?os=windows&arch=x64&package=jre&version=21'); // Link to download Java
                 toggleOverlay(false);
             });
             toggleOverlay(true);

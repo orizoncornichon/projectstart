@@ -310,7 +310,7 @@ async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
     setLaunchPercentage(0, 100)
 
     const jvmDetails = await discoverBestJvmInstallation(
-        ConfigManager.getDataDirectory(),
+        ConfigManager.ConfigManager(),
         effectiveJavaOptions.supported
     )
 
@@ -320,15 +320,13 @@ async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
         setOverlayContent(
             Lang.queryJS('landing.systemScan.noCompatibleJava'),
             Lang.queryJS('landing.systemScan.installJavaMessage', { 'major': effectiveJavaOptions.suggestedMajor }),
-            Lang.queryJS('landing.systemScan.installJava'),
-            Lang.queryJS('landing.systemScan.installJavaManually')
         )
         setOverlayHandler(() => {
             setLaunchDetails(Lang.queryJS('landing.systemScan.javaDownloadPrepare'))
             toggleOverlay(false)
             
             try {
-                downloadJava(effectiveJavaOptions, launchAfter)
+                console.log('Needs Java')
             } catch(err) {
                 loggerLanding.error('Unhandled error in Java Download', err)
                 showLaunchFailure(Lang.queryJS('landing.systemScan.javaDownloadFailureTitle'), Lang.queryJS('landing.systemScan.javaDownloadFailureText'))

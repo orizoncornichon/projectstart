@@ -180,7 +180,7 @@ javaDownloadPrepare = "Préparation du téléchargement de Java.."
 javaDownloadFailureTitle = "Échec du téléchargement de Java"
 javaDownloadFailureText = "Le téléchargement de Java a échoué. Veuillez réessayer."
 javaRequired = "Java est requis pour lancer le jeu."
-javaRequiredMessage = 'Java est requis pour lancer le jeu. Veuillez installer Java et réessayer.'
+javaRequiredMessage = 'Veuillez installer Java et réessayer.'
 javaRequiredDismiss = "Je comprends"
 javaRequiredCancel = "Retour"
 

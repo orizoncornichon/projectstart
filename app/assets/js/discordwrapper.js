@@ -45,8 +45,19 @@ exports.updateDetails = function(details){
 
 exports.shutdownRPC = function(){
     if(!client) return
-    client.clearActivity()
-    client.destroy()
+    try {
+        // Only attempt to clear activity if client.transport and client.transport.socket are valid
+        if (client.transport && client.transport.socket) {
+            client.clearActivity()
+        }
+    } catch (e) {
+        logger.info('Error clearing Discord activity (likely already disconnected):', e.message)
+    }
+    try {
+        client.destroy()
+    } catch (e) {
+        logger.info('Error destroying Discord RPC client (likely already disconnected):', e.message)
+    }
     client = null
     activity = null
 }

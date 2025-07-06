@@ -1336,18 +1336,6 @@ async function populateJavaExecDetails(execPath) {
             });
             toggleOverlay(true);
         }
-    } else {
-        settingsJavaExecDetails.innerHTML = Lang.queryJS('settings.java.invalidSelection');
-        setOverlayContent(
-            Lang.queryJS('settings.java.notFoundTitle'),
-            Lang.queryJS('settings.java.notFoundMessage'),
-            Lang.queryJS('settings.java.downloadButton')
-        );
-        setOverlayHandler(() => {
-            shell.openExternal('https://adoptium.net/'); // Link to download Java
-            toggleOverlay(false);
-        });
-        toggleOverlay(true);
     }
 }
 

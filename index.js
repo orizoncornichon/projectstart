@@ -349,11 +349,11 @@ function getPlatformIcon(filename){
 app.on('ready', createWindow)
 app.on('ready', createMenu)
 
-app.on('ready', () => {
-    globalShortcut.register('Control+Shift+I', () => {
-        return false;
-    })
-})
+// app.on('ready', () => {
+//     globalShortcut.register('Control+Shift+I', () => {
+//         return false;
+//     })
+// })
 
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar

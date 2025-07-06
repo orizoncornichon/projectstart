@@ -120,8 +120,22 @@ document.getElementById('launch_button').addEventListener('click', async e => {
             const details = await validateSelectedJvm(ensureJavaDirIsRoot(jExe), server.effectiveJavaOptions.supported)
             if(details != null){
                 loggerLanding.info('Jvm Details', details)
+                if(details.semver && details.semver.major < 21){
+                    setOverlayContent(
+                        'Version de Java trop ancienne',
+                        'Veuillez installer Java 21 pour continuer.',
+                        'Télécharger Java 21'
+                    )
+                    setOverlayHandler(() => {
+                        require('electron').shell.openExternal('https://www.oracle.com/java/technologies/downloads/#jdk21-windows')
+                    })
+                    setDismissHandler(() => {
+                        toggleOverlay(false)
+                    })
+                    toggleOverlay(true, true)
+                    return
+                }
                 await dlAsync()
-
             } else {
                 await asyncSystemScan(server.effectiveJavaOptions)
             }
@@ -310,50 +324,26 @@ async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
     setLaunchPercentage(0, 100)
 
     const jvmDetails = await discoverBestJvmInstallation(
-        ConfigManager.ConfigManager(),
+        ConfigManager.getDataDirectory(),
         effectiveJavaOptions.supported
     )
 
     if(jvmDetails == null) {
-        // If the result is null, no valid Java installation was found.
-        // Show this information to the user.
+        // Affichage personnalisé pour l'absence de Java
         setOverlayContent(
-            Lang.queryJS('landing.systemScan.noCompatibleJava'),
-            Lang.queryJS('landing.systemScan.installJavaMessage', { 'major': effectiveJavaOptions.suggestedMajor }),
-        )
+            'Aucune version Java détectée',
+            'Veuillez installer Java 21 pour continuer.',
+            'Télécharger Java 21'
+        );
         setOverlayHandler(() => {
-            setLaunchDetails(Lang.queryJS('landing.systemScan.javaDownloadPrepare'))
-            toggleOverlay(false)
-            
-            try {
-                console.log('Needs Java')
-            } catch(err) {
-                loggerLanding.error('Unhandled error in Java Download', err)
-                showLaunchFailure(Lang.queryJS('landing.systemScan.javaDownloadFailureTitle'), Lang.queryJS('landing.systemScan.javaDownloadFailureText'))
-            }
-        })
+            // Ouvre le lien dans le navigateur par défaut
+            require('electron').shell.openExternal('https://www.oracle.com/java/technologies/downloads/#jdk21-windows');
+        });
         setDismissHandler(() => {
-            $('#overlayContent').fadeOut(250, () => {
-                //$('#overlayDismiss').toggle(false)
-                setOverlayContent(
-                    Lang.queryJS('landing.systemScan.javaRequired', { 'major': effectiveJavaOptions.suggestedMajor }),
-                    Lang.queryJS('landing.systemScan.javaRequiredMessage', { 'major': effectiveJavaOptions.suggestedMajor }),
-                    Lang.queryJS('landing.systemScan.javaRequiredDismiss'),
-                    Lang.queryJS('landing.systemScan.javaRequiredCancel')
-                )
-                setOverlayHandler(() => {
-                    toggleLaunchArea(false)
-                    toggleOverlay(false)
-                })
-                setDismissHandler(() => {
-                    toggleOverlay(false, true)
-
-                    asyncSystemScan(effectiveJavaOptions, launchAfter)
-                })
-                $('#overlayContent').fadeIn(250)
-            })
-        })
-        toggleOverlay(true, true)
+            toggleOverlay(false);
+        });
+        toggleOverlay(true, true);
+        return;
     } else {
         // Java installation found, use this to launch the game.
         const javaExec = javaExecFromRoot(jvmDetails.path)
